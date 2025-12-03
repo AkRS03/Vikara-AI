@@ -5,10 +5,10 @@ from pydantic import BaseModel
 from datetime import datetime
 import random
 from sqlalchemy.orm import Session
-from app.agent import run_agent
+from app.agent import run_chat_agent  # Updated import
 
 from database.db import SessionLocal
-from database.db import Ticket  # <-- your DB model
+from database.db import Ticket  # Your DB model
 
 ap = FastAPI(title="Triage API with DB")
 
@@ -22,7 +22,6 @@ support_staff = [
 # -------------------------
 # DB Session Dependency
 # -------------------------
-
 def get_db():
     db = SessionLocal()
     try:
@@ -34,7 +33,6 @@ def get_db():
 # -------------------------
 # Request Models
 # -------------------------
-
 class CreateTicketRequest(BaseModel):
     username: str
     question: str
@@ -47,11 +45,10 @@ class ResolveTicketRequest(BaseModel):
 # -------------------------
 # Create Ticket
 # -------------------------
-
 @ap.post("/tickets/create")
 def create_ticket(req: CreateTicketRequest, db: Session = Depends(get_db)):
 
-    result = run_agent(req.question)
+    result = run_chat_agent(req.question)
     agent = random.choice(support_staff)
 
     ticket = Ticket(
@@ -74,7 +71,7 @@ def create_ticket(req: CreateTicketRequest, db: Session = Depends(get_db)):
 
     return {
         "ticket_id": ticket.id,
-        "response": result,
+        "response": result,        # contains chat_response
         "assigned_to": agent["name"]
     }
 
@@ -82,7 +79,6 @@ def create_ticket(req: CreateTicketRequest, db: Session = Depends(get_db)):
 # -------------------------
 # Resolve Ticket
 # -------------------------
-
 @ap.post("/tickets/resolve")
 def resolve_ticket(req: ResolveTicketRequest, db: Session = Depends(get_db)):
 

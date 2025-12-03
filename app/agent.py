@@ -8,14 +8,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# -------- Load KB --------
-with open(r"C:/Users/Lenovo/Desktop/Vikara AI/knowledge_base/kb.json") as f:
+# -------- Relative path to KB --------
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+KB_PATH = os.path.join(BASE_DIR, "app\knowledge_base", "kb.json")
+
+with open(KB_PATH, "r") as f:
     KB = json.load(f)
 
 # -------- Groq LLM --------
 llm = ChatGroq(
     groq_api_key=os.getenv("GROQ_API_KEY"),
-    model_name=os.getenv('MODEL_NAME'),   # FIXED MODEL
+    model_name=os.getenv("MODEL_NAME"),   # FIXED MODEL
     temperature=0.3
 )
 
@@ -36,8 +39,8 @@ def search_kb(query: str):
     return [m[1] for m in matches[:3]]
 
 
-# -------- Prompt (ESCAPED JSON) --------
-prompt = PromptTemplate.from_template("""
+# -------- Structured Prompt --------
+structured_prompt = PromptTemplate.from_template("""
 You are a support triage agent.
 User issue: "{question}"
 
@@ -54,17 +57,35 @@ Respond ONLY in JSON:
 """)
 
 
-# -------- Main Agent Logic --------
-def run_agent(question: str):
+# -------- Chatbot Prompt --------
+chat_prompt = PromptTemplate.from_template("""
+You are a friendly support assistant. Use the knowledge base results below to respond naturally and helpfully.
 
-    # ----- ASK LLM -----
-    formatted = prompt.format(question=question)
+User question: "{question}"
+Knowledge base matches: {kb_matches}
+
+Instructions:
+1. If you cannot answer the question due to lack of relevant data in the knowledge base, respond:
+   "I can't help with this query. Please press NO on the 'issue resolved' button to get the customer support contact."
+2. If you can answer the question with reference from the knowledge base, provide your answer clearly. 
+   Then instruct the user: 
+   - Press YES on the 'issue resolved' button if your answer solves the issue. 
+   - Press NO if their issue is not resolved, and they will receive the contact of a customer support agent.
+   
+Respond in plain, concise text suitable for a chatbot.
+""")
+
+
+
+# -------- Structured agent logic --------
+def run_agent(question: str):
+    # ----- ASK LLM (structured) -----
+    formatted = structured_prompt.format(question=question)
     response = llm.invoke(formatted)
 
     try:
         meta = json.loads(response.content)
     except:
-        # fallback if model adds text
         cleaned = response.content.strip().split("```")[-1]
         meta = json.loads(cleaned)
 
@@ -88,3 +109,16 @@ def run_agent(question: str):
         "related_issues": matches,
         "next_step": next_step
     }
+
+
+# -------- Chatbot wrapper --------
+def run_chat_agent(question: str):
+    result = run_agent(question)
+
+    kb_matches = [item.get("solution", "") for item in result["related_issues"]]
+    formatted = chat_prompt.format(question=question, kb_matches=kb_matches)
+
+    chat_response = llm.invoke(formatted).content
+
+    result["chat_response"] = chat_response
+    return result
