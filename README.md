@@ -103,3 +103,37 @@ Stores:
 [6 rows x 13 columns]
 
 These entries were obtained upon testing and sharing the project with my family, I can share an excel of these reports if asked for, I encourage the team of Vikara AI to send in their own queries as well and I can show those entries too in the aforementioned excel sheet.
+
+> These entries were obtained upon testing and sharing the project with my family. An Excel version of these reports can also be shared. Team members are encouraged to submit their own queries to see their entries reflected.
+
+## Local Setup
+
+
+To run the project locally, first clone the repository and navigate into it:
+
+git clone <your-repo-url>
+cd Vikara-AI
+
+Install the dependencies:
+
+pip install -r requirements.txt
+
+Set up environment variables. Generate a Groq API key at https://console.groq.com/keys
+ and then set:
+
+- GROQ_API_KEY="your_api_key"
+- DATABASE_URL="postgresql://client_complaints_log_fb28_user:Jdc9uQCLrKZh7JOn7ie5J6Q21ntDSHxQ@dpg-d4ntaoje5dus738f1450-a.oregon-- postgres.render.com/client_complaints_log_fb28"
+- MODEL_NAME="llama-3.3-70b-versatile"
+
+> Note: MODEL_NAME is recommended as it allows for most free tokens. DATABASE_URL points to the prototype database; you can use database_view.py to query ticket entries.
+
+### Run the backend:
+
+> uvicorn app.api:app --reload
+
+### Run the frontend:
+Open a new terminal 
+> cd frontend <br>
+> streamlit run app.py
+
+Optionally, use database_view.py to inspect tickets in the database.
