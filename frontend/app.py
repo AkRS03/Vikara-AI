@@ -1,7 +1,3 @@
-# ===========================
-# streamlit_app.py
-# ===========================
-
 import streamlit as st
 import requests
 
@@ -9,11 +5,10 @@ BACKEND = "https://vikara-ai.onrender.com"  # deployed backend URL
 
 st.title("Support Ticket System (Prototype)")
 
-# Initialize session state
+
 if "ticket_id" not in st.session_state:
     st.session_state.ticket_id = None
 
-# User inputs
 username = st.text_input("Your Name")
 question = st.text_area("Describe your issue")
 
@@ -37,7 +32,7 @@ if st.button("Submit Ticket", disabled=submit_disabled):
     except requests.RequestException as e:
         st.error(f"Failed to submit ticket: {e}")
 
-# If ticket exists, ask about resolution
+
 if st.session_state.ticket_id:
     st.write("---")
     st.write("Was your issue resolved?")
