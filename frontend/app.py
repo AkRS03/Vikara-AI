@@ -5,7 +5,7 @@
 import streamlit as st
 import requests
 
-BACKEND = "http://localhost:8000"  # change to your deployed backend URL
+BACKEND = "https://vikara-ai.onrender.com"  # deployed backend URL
 
 st.title("Support Ticket System (Prototype)")
 
