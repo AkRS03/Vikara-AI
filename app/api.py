@@ -19,9 +19,6 @@ support_staff = [
     {"name": "Vikram", "phone": "1800-555-666"},
 ]
 
-# -------------------------
-# DB Session Dependency
-# -------------------------
 def get_db():
     db = SessionLocal()
     try:
@@ -30,9 +27,7 @@ def get_db():
         db.close()
 
 
-# -------------------------
-# Request Models
-# -------------------------
+
 class CreateTicketRequest(BaseModel):
     username: str
     question: str
@@ -42,9 +37,6 @@ class ResolveTicketRequest(BaseModel):
     resolved: bool
 
 
-# -------------------------
-# Create Ticket
-# -------------------------
 @ap.post("/tickets/create")
 def create_ticket(req: CreateTicketRequest, db: Session = Depends(get_db)):
 
@@ -76,9 +68,6 @@ def create_ticket(req: CreateTicketRequest, db: Session = Depends(get_db)):
     }
 
 
-# -------------------------
-# Resolve Ticket
-# -------------------------
 @ap.post("/tickets/resolve")
 def resolve_ticket(req: ResolveTicketRequest, db: Session = Depends(get_db)):
 
