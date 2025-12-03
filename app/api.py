@@ -1,5 +1,3 @@
-# app/api.py
-
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
 from datetime import datetime
