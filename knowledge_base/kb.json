@@ -1,0 +1,51 @@
+[
+  {
+    "id": "ISSUE-101",
+    "title": "Checkout error 500 on mobile",
+    "category": "Bug",
+    "symptoms": ["500", "checkout", "mobile"],
+    "recommended_action": "Escalate to payments team"
+  },
+  {
+    "id": "ISSUE-102",
+    "title": "Login OTP not received",
+    "category": "Login",
+    "symptoms": ["otp", "login", "sms"],
+    "recommended_action": "Ask user to confirm phone number and carrier"
+  },
+  {
+    "id": "ISSUE-103",
+    "title": "High latency on dashboard",
+    "category": "Performance",
+    "symptoms": ["slow", "dashboard", "latency"],
+    "recommended_action": "Check performance logs"
+  },
+  {
+    "id": "ISSUE-104",
+    "title": "Payment card declined",
+    "category": "Billing",
+    "symptoms": ["payment", "declined", "card"],
+    "recommended_action": "Ask user for alternate card"
+  },
+  {
+    "id": "ISSUE-105",
+    "title": "App crash on startup",
+    "category": "Bug",
+    "symptoms": ["crash", "startup", "freeze"],
+    "recommended_action": "Escalate to mobile team"
+  },
+  {
+    "id": "ISSUE-106",
+    "title": "How to reset password",
+    "category": "How-To",
+    "symptoms": ["reset", "password"],
+    "recommended_action": "Attach help doc"
+  },
+  {
+    "id": "ISSUE-107",
+    "title": "Invoice not generated",
+    "category": "Billing",
+    "symptoms": ["invoice", "billing"],
+    "recommended_action": "Trigger invoice generation"
+  }
+]
