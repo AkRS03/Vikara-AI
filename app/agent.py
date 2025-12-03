@@ -9,12 +9,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # -------- Relative path to KB --------
+# Relative path to KB, cross-platform safe
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-KB_PATH = os.path.join(BASE_DIR, "app\knowledge_base", "kb.json")
+KB_PATH = os.path.join(BASE_DIR, "app", "knowledge_base", "kb.json")
 
 with open(KB_PATH, "r") as f:
     KB = json.load(f)
-
 # -------- Groq LLM --------
 llm = ChatGroq(
     groq_api_key=os.getenv("GROQ_API_KEY"),
